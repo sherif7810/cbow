@@ -29,7 +29,7 @@ word_to_index = {word: i for i, word in enumerate(vocab)}
 
 
 class CBoW(nn.Module):
-    """Continuous bag of words."""
+    """Continuous bag-of-words model."""
 
     def __init__(self, vocab_size, embedding_dim, context_size):
         super(CBoW, self).__init__()

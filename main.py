@@ -42,7 +42,7 @@ class CBoW(nn.Module):
         embeds = self.embeddings(input).view(1, -1)
         out = F.relu(self.fc1(embeds))
         out = self.fc2(out)
-        log_probs = F.log_softmax(out)
+        log_probs = F.log_softmax(out, dim=1)
         return log_probs
 
 

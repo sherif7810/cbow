@@ -48,7 +48,7 @@ class CBoW(nn.Module):
 
 # Model creation
 criterion = nn.NLLLoss()
-model = CBoW(len(vocab), 5, 4)
+model = CBoW(len(vocab), 50, 4)
 optimizer = optim.SGD(model.parameters(), lr=0.001)
 
 # Training

@@ -38,8 +38,8 @@ class CBoW(nn.Module):
         self.fc1 = nn.Linear(context_size * embedding_dim, 128)
         self.fc2 = nn.Linear(128, vocab_size)
 
-    def forward(self, input):
-        embeds = self.embeddings(input).view(1, -1)
+    def forward(self, x):
+        embeds = self.embeddings(x).view(1, -1)
         out = F.relu(self.fc1(embeds))
         out = self.fc2(out)
         log_probs = F.log_softmax(out, dim=1)

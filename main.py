@@ -28,19 +28,23 @@ vocab = set(test_sentence)
 word_to_index = {word: i for i, word in enumerate(vocab)}
 
 
-class CBoW(nn.Module):
+class CBoW(torch.jit.ScriptModule):
     """Continuous bag-of-words model."""
 
-    def __init__(self, vocab_size, embedding_dim, context_size):
+    def __init__(self, vocab_size: int, embedding_dim: int, context_size: int):
         super(CBoW, self).__init__()
 
         self.embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.fc1 = nn.Linear(context_size * embedding_dim, 128)
+        self.layer1 = nn.Sequential(
+            nn.Linear(context_size * embedding_dim, 128),
+            nn.ReLU()
+        )
         self.fc2 = nn.Linear(128, vocab_size)
 
-    def forward(self, x):
+    @torch.jit.script_method
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         embeds = self.embeddings(x).view(1, -1)
-        out = F.relu(self.fc1(embeds))
+        out = self.layer1(embeds)
         out = self.fc2(out)
         log_probs = F.log_softmax(out, dim=1)
         return log_probs
